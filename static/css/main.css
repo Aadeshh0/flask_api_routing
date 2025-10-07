@@ -1,6 +1,12 @@
-body {
+body, html {
     margin : 120;
-    font-family :'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+    font-family :'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: #fafbfe;
+}
+
+.content {
+    margin: 0 auto;
+    width: 400px;
 }
 
 table, td, th {
@@ -19,4 +25,12 @@ th {
 td {
     text-align: center;
     padding: 5px;
+}
+
+.form {
+    margin-top: 20px;
+}
+
+#content {
+    width: 70%;
 }
