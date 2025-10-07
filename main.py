@@ -36,7 +36,7 @@ def delete_task(id):
 
     try:
         db.session.delete(task_to_delete)
-        db.commit()
+        db.session.commit()
         return redirect('/')
     except:
         return 'There was a problem deleting the task'
@@ -49,7 +49,7 @@ def update_task(id):
         task_to_update.content = request.form['content']
 
         try:
-            db.commit()
+            db.session.commit()
             return redirect('/')
         except:
             return 'There was a problem updating your task.'
