@@ -13,13 +13,19 @@
     {% else %}
     <table>
         <tr>
+            <th>Done</th>
             <th>Task</th>
             <th>Added</th>
             <th>Actions</th>
         </tr>
         {% for task in tasks %}
             <tr>
-                <td>{{ task.content }}</td>
+                <td>
+                    <form action="/toggle/{{task.id}}" method="GET">
+                        <input type="checkbox" onchange="this.form.submit()" {% if task.is_done %}checked{% endif %}>
+                    </form>
+                </td>
+                <td class="{% if task.is_done %}completed{% endif %}">{{ task.content }}</td>
                 <td>{{ task.date_created.date() }}</td>
                 <td>
                     <a href="/update/{{task.id}}">✏️ Edit</a>
@@ -35,5 +41,7 @@
         <input type="text" name="content" id="content" placeholder="Enter a new task..." required>
         <input type="submit" value="Add Task">
     </form>
+
+    
 </div>
 {% endblock%}

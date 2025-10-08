@@ -13,7 +13,8 @@
   
   /* ====== Container ====== */
   .content {
-    max-width: 600px;
+    width: 100%;
+    max-width: 1200px;
     margin: 60px auto;
     background: #fff;
     padding: 2rem;
@@ -106,6 +107,11 @@
   input[type="submit"]:hover {
     background-color: #3c54c0;
     transform: translateY(-1px);
+  }
+
+  .completed{
+    text-decoration: line-through;
+    color: gray;
   }
   
   /* ====== Responsive ====== */
