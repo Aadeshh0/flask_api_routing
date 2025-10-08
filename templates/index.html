@@ -7,7 +7,7 @@
 {% block body%} 
 <div class="content">
     <h1 style="text-align: center;">Task Master</h1>
-    <p style="text-align: center;">This is the main content of the home page.</p>
+    <p style="text-align: center;">Your simple, modern to-do manager.</p>
     {% if tasks|length < 1 %}
     <h4 style="text-align: center;">No tasks available. Add a task below.</h4>
     {% else %}
@@ -22,17 +22,17 @@
                 <td>{{ task.content }}</td>
                 <td>{{ task.date_created.date() }}</td>
                 <td>
-                    <a href="/delete/{{task.id}}">Delete</a>
+                    <a href="/update/{{task.id}}">✏️ Edit</a>
                     <br>
-                    <a href="/update/{{task.id}}">Update</a>
+                    <a href="/delete/{{task.id}}">🗑 Delete</a>
                 </td>
             </tr>
         {% endfor %}
     </table>
     {% endif %}
 
-    <form action="/" method="POST" style="text-align: center;">
-        <input type="text" name="content" id="content">
+    <form action="/" method="POST">
+        <input type="text" name="content" id="content" placeholder="Enter a new task..." required>
         <input type="submit" value="Add Task">
     </form>
 </div>
