@@ -8,6 +8,15 @@
 <div class="content">
     <h1 style="text-align: center;">Task Master</h1>
     <p style="text-align: center;">Your simple, modern to-do manager.</p>
+
+    <div style="text-align: center; margin-bottom: 1rem;">
+        <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search tasks..." 
+            style="width: 60%; padding: 10px; font-size: 1em; border: 1px solid #ccc; border-radius: 10px;"
+        >
+    </div>
     {% if tasks|length < 1 %}
     <h4 style="text-align: center;">No tasks available. Add a task below.</h4>
     {% else %}
@@ -42,6 +51,69 @@
         <input type="submit" value="Add Task">
     </form>
 
-    
+    <p style="text-align: left; color: gray; font-size: 0.9em; margin-top: 12px;" >
+        Press <strong>Shift</strong> & <strong>+</strong> to quickly add a new task
+    </p>
+        
 </div>
+
+<script>
+    document.addEventListener('keydown', function (event) {
+        // Check if Shift and '+' are pressed together
+        if (event.shiftKey && event.key === '+') {
+            const input = document.getElementById('content');
+            
+            // Only trigger if the user is NOT currently typing in another field
+            if (document.activeElement === document.body || document.activeElement.tagName === 'TABLE') {
+                event.preventDefault(); // prevent accidental zoom or other action
+                input.focus();
+            }
+        }
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    let debounceTimer;
+    
+    searchInput.addEventListener('input', function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const filter = (searchInput.value || '').toLowerCase();
+    
+        // Select all rows but skip the header row if present
+        const rows = Array.from(document.querySelectorAll('table tr')).filter(r => r.querySelectorAll('td').length > 0);
+    
+        let visibleCount = 0;
+        rows.forEach(row => {
+          // Try to find the task text robustly:
+          let taskCell = row.querySelector('.task-content')          // preferred if you add class
+                      || row.querySelector('td:nth-child(2)')       // second column (if you have checkbox first)
+                      || row.querySelector('td:nth-child(1)')       // first column fallback
+                      || row.querySelector('td');                   // final fallback
+    
+          const taskText = taskCell ? (taskCell.innerText || '').toLowerCase() : '';
+    
+          if (taskText.includes(filter)) {
+            row.style.display = '';
+            visibleCount++;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+    
+        // Manage "No tasks found" message
+        let tableBody = document.querySelector('table');
+        let noTasksMsg = document.getElementById('noTasksMsg');
+        if (!noTasksMsg) {
+          noTasksMsg = document.createElement('tr');
+          noTasksMsg.id = 'noTasksMsg';
+          noTasksMsg.innerHTML = `<td colspan="4" style="text-align:center; color: gray;">No tasks found</td>`;
+          tableBody.appendChild(noTasksMsg);
+        }
+        noTasksMsg.style.display = visibleCount === 0 ? '' : 'none';
+      }, 150);
+    });
+</script>
+
+    
+    
 {% endblock%}
