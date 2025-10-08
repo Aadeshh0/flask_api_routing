@@ -10,9 +10,10 @@ class Todo(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     content = db.Column(db.String(200), nullable = False)
     date_created = db.Column(db.DateTime, default = datetime.utcnow)
+    is_done = db.Column(db.Boolean, default = False)
 
     def __repr__(self):
-        return f'Task id={self.id} content = {self.content}'
+        return f'Task id={self.id} content = "{self.content}" done = {self.is_done}'
 
 @app.route('/', methods = ['POST', 'GET'])
 def main():
@@ -56,6 +57,17 @@ def update_task(id):
     
     else:
         return render_template('update.html', task = task_to_update)
+    
+@app.route('/toggle/<int:id>')
+def toggle_task(id):
+    task_to_toggle = Todo.query.get_or_404(id)
+    task_to_toggle.is_done = not task_to_toggle.is_done
+
+    try:
+        db.session.commit()
+        return redirect('/')
+    except:
+        return 'There was a problem toggling the task status.'
 
 
 @app.route('/user-profile', methods=['GET'])
